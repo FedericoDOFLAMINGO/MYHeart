@@ -29,12 +29,409 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    gap: 16px;
+    padding: 40px 24px;
+    overflow-y: auto;
     transition: opacity 0.9s ease;
   }
   #welcome.hide {
     opacity: 0;
     pointer-events: none;
   }
+
+  .w-petal {
+    position: absolute;
+    top: -40px;
+    animation: falling linear infinite;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  .w-heart {
+    font-size: 4.5rem;
+    animation: wHeartbeat 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px #ff4d7d);
+    flex-shrink: 0;
+  }
+  @keyframes wHeartbeat {
+    0%, 100% { transform: scale(1); }
+    40%       { transform: scale(1.2); }
+    70%       { transform: scale(0.92); }
+  }
+
+  .w-title {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 2.8rem;
+    color: #f7d6e0;
+    text-shadow: 0 0 30px #ff4d7d88;
+    letter-spacing: 2px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+
+  .w-card {
+    background: linear-gradient(160deg, #2a0d18, #1f0812);
+    border: 1px solid #5a2035;
+    border-radius: 12px;
+    padding: 22px 26px;
+    width: 100%;
+    max-width: 320px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(255,77,125,0.15), inset 0 0 30px rgba(255,77,125,0.04);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .w-card::before {
+    content: '✦';
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #e879a0;
+    font-size: 1.1rem;
+    background: #1a0a0f;
+    padding: 0 8px;
+  }
+  .w-card p {
+    font-family: 'Lora', serif;
+    font-style: italic;
+    font-size: 0.92rem;
+    color: #d4849a;
+    line-height: 1.75;
+  }
+  .w-card p + p { margin-top: 8px; }
+
+  .w-btn {
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(135deg, #e879a0, #c0406a);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 48px;
+    font-family: 'Pinyon Script', cursive;
+    font-size: 1.6rem;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 6px 28px rgba(232,121,160,0.5);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: btnPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .w-btn:active {
+    transform: scale(0.96);
+  }
+  @keyframes btnPulse {
+    0%, 100% { box-shadow: 0 6px 28px rgba(232,121,160,0.5); }
+    50%       { box-shadow: 0 6px 42px rgba(232,121,160,0.85); }
+  }
+
+  /* ── Animaciones generales ── */
+  .petal {
+    position: fixed;
+    top: -40px;
+    animation: falling linear infinite;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.7;
+  }
+  @keyframes falling {
+    0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity: 0.8; }
+    50%  { transform: translateY(50vh) rotate(180deg) translateX(30px); }
+    100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; }
+  }
+
+  .bg-heart {
+    position: fixed;
+    color: #ff4d7d22;
+    animation: floatUp linear infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(110vh) scale(0.8); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.4; }
+    100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+  }
+
+  .sparkle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ffcce0;
+    pointer-events: none;
+    z-index: 0;
+    animation: twinkle ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50%       { opacity: 1; transform: scale(1.5); }
+  }
+
+  /* ── Carta principal ── */
+  .envelope-wrap {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 480px;
+  }
+
+  .ribbon {
+    text-align: center;
+    margin-bottom: -18px;
+    position: relative;
+    z-index: 2;
+  }
+  .ribbon span {
+    display: inline-block;
+    background: linear-gradient(135deg, #e8b4c8, #f7d6e0);
+    color: #7a2040;
+    font-family: 'Pinyon Script', cursive;
+    font-size: 1.4rem;
+    padding: 6px 28px;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(232,180,200,0.4);
+    letter-spacing: 1px;
+  }
+
+  .card {
+    background: linear-gradient(160deg, #fff9f5 0%, #fff0f5 50%, #fdf5ff 100%);
+    border-radius: 4px;
+    box-shadow:
+      0 30px 80px rgba(0,0,0,0.5),
+      0 0 0 1px rgba(232,180,200,0.3),
+      inset 0 0 60px rgba(255,200,220,0.08);
+    overflow: hidden;
+    animation: cardAppear 1.2s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
+    transform: scale(0.85) translateY(30px);
+    opacity: 0;
+  }
+  @keyframes cardAppear {
+    to { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  .photo-section {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+  }
+  .photo-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    filter: brightness(0.92) saturate(1.1);
+  }
+  .photo-section::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, transparent 50%, #fff9f5 100%);
+  }
+
+  .heart-badge {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    font-size: 2.5rem;
+    filter: drop-shadow(0 4px 12px rgba(255,77,125,0.6));
+    animation: heartbeat 1.8s ease-in-out infinite;
+  }
+  @keyframes heartbeat {
+    0%, 100% { transform: translateX(-50%) scale(1); }
+    30%       { transform: translateX(-50%) scale(1.18); }
+    60%       { transform: translateX(-50%) scale(0.95); }
+  }
+
+  .letter-body {
+    padding: 40px 36px 36px;
+    position: relative;
+  }
+  .letter-body::before {
+    content: '"';
+    position: absolute;
+    top: 20px;
+    left: 28px;
+    font-family: 'Pinyon Script', cursive;
+    font-size: 6rem;
+    color: #f0c0d0;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .names {
+    text-align: center;
+    font-family: 'Pinyon Script', cursive;
+    font-size: 2.8rem;
+    color: #c0406a;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 0 #fce4ec;
+    animation: shimmer 3s ease-in-out infinite;
+  }
+  @keyframes shimmer {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.8; text-shadow: 0 0 20px #ff8ab0; }
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, #e8b4c8, transparent);
+  }
+  .divider span { font-size: 1rem; }
+
+  .letter-text {
+    font-size: 1.05rem;
+    color: #5a2a3a;
+    line-height: 1.85;
+    font-style: italic;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .letter-text p + p { margin-top: 14px; }
+
+  .signature {
+    margin-top: 28px;
+    text-align: right;
+    font-family: 'Pinyon Script', cursive;
+    font-size: 2rem;
+    color: #c0406a;
+  }
+
+  .card-border {
+    height: 6px;
+    background: linear-gradient(90deg, #f9a8c0, #e879a0, #f9a8c0, #e879a0);
+    background-size: 200% 100%;
+    animation: borderSlide 3s linear infinite;
+  }
+  @keyframes borderSlide {
+    0%   { background-position: 0% 0%; }
+    100% { background-position: 200% 0%; }
+  }
+</style>
+</head>
+<body>
+
+<audio id="musica" src="cancion.mp3" loop></audio>
+
+<!-- Pantalla de bienvenida -->
+<div id="welcome">
+  <div class="w-heart">💕</div>
+  <div class="w-title">Angela & Fer</div>
+
+  <div class="w-card">
+    <p>Hay algo especial esperándote aquí,</p>
+    <p>preparado con todo el amor del mundo</p>
+    <p>solo para ti. 🌸</p>
+  </div>
+
+  <button class="w-btn" id="enter-btn">Abrir carta 💌</button>
+</div>
+
+<!-- Carta principal -->
+<div class="envelope-wrap">
+  <div class="ribbon"><span>para Angela, con todo mi amor</span></div>
+  <div class="card">
+    <div class="card-border"></div>
+    <div class="photo-section">
+      <img src="imgAF.jpg" alt="Angela y Fer">
+      <div class="heart-badge">💕</div>
+    </div>
+    <div class="letter-body">
+      <div class="names">Angela & Fer</div>
+      <div class="divider"><span>🌸</span></div>
+      <div class="letter-text">
+        <p>Hay personas que llegan a tu vida sin avisar y de repente se convierten en tu parte favorita del día.</p>
+        <p>Contigo aprendí que el amor no grita, susurra — en cada abrazo, en cada mirada, en cada momento pequeño que guardamos juntos.</p>
+        <p>Gracias por ser mi calma, mi risa y mi hogar. Eres lo más bonito que tengo. 🌷</p>
+      </div>
+      <div class="signature">Con todo mi amor, Fer 💕</div>
+    </div>
+    <div class="card-border"></div>
+  </div>
+</div>
+
+<script>
+  const audio   = document.getElementById('musica');
+  const welcome = document.getElementById('welcome');
+  const btn     = document.getElementById('enter-btn');
+  const petals  = ['🌸','🌷','✿','❀','🌺'];
+
+  // Pétalos decorativos en bienvenida
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('div');
+    el.className = 'w-petal';
+    el.textContent = petals[Math.floor(Math.random() * petals.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (6 + Math.random() * 8) + 's';
+    el.style.animationDelay    = (Math.random() * 8) + 's';
+    el.style.fontSize = (0.8 + Math.random() * 1) + 'rem';
+    welcome.appendChild(el);
+  }
+
+  let opened = false;
+  function openCard(e) {
+    if (opened) return;
+    opened = true;
+    if (e) e.preventDefault();
+    audio.volume = 1;
+    audio.play().catch(() => {});
+    welcome.classList.add('hide');
+    spawnBackground();
+  }
+
+  btn.addEventListener('click',    openCard);
+  btn.addEventListener('touchend', openCard, { passive: false });
+
+  function spawnBackground() {
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('div');
+      el.className = 'petal';
+      el.textContent = petals[Math.floor(Math.random() * petals.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (6 + Math.random() * 8) + 's';
+      el.style.animationDelay    = (Math.random() * 10) + 's';
+      el.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+      document.body.appendChild(el);
+    }
+    for (let i = 0; i < 12; i++) {
+      const el = document.createElement('div');
+      el.className = 'bg-heart';
+      el.textContent = '♥';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (8 + Math.random() * 10) + 's';
+      el.style.animationDelay    = (Math.random() * 12) + 's';
+      el.style.fontSize = (0.6 + Math.random() * 1.4) + 'rem';
+      document.body.appendChild(el);
+    }
+    for (let i = 0; i < 30; i++) {
+      const el = document.createElement('div');
+      el.className = 'sparkle';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.top  = Math.random() * 100 + 'vh';
+      el.style.animationDuration = (1.5 + Math.random() * 3) + 's';
+      el.style.animationDelay    = (Math.random() * 4) + 's';
+      document.body.appendChild(el);
+    }
+  }
+</script>
+
+</body>
+</html>  }
 
   .w-petal {
     position: absolute;
