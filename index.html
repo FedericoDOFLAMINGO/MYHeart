@@ -19,7 +19,6 @@
     font-family: 'Lora', serif;
   }
 
-  /* ── Pétalos flotantes ── */
   .petal {
     position: fixed;
     top: -40px;
@@ -35,10 +34,8 @@
     100% { transform: translateY(110vh) rotate(360deg) translateX(-20px); opacity: 0; }
   }
 
-  /* ── Corazones flotantes fondo ── */
   .bg-heart {
     position: fixed;
-    font-size: 1rem;
     color: #ff4d7d22;
     animation: floatUp linear infinite;
     pointer-events: none;
@@ -51,7 +48,6 @@
     100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
   }
 
-  /* ── Carta ── */
   .envelope-wrap {
     position: relative;
     z-index: 1;
@@ -59,7 +55,6 @@
     max-width: 480px;
   }
 
-  /* Cinta arriba */
   .ribbon {
     text-align: center;
     margin-bottom: -18px;
@@ -90,12 +85,10 @@
     transform: scale(0.85) translateY(30px);
     opacity: 0;
   }
-
   @keyframes cardAppear {
     to { transform: scale(1) translateY(0); opacity: 1; }
   }
 
-  /* Foto */
   .photo-section {
     position: relative;
     height: 300px;
@@ -116,7 +109,6 @@
     background: linear-gradient(to bottom, transparent 50%, #fff9f5 100%);
   }
 
-  /* Corazón encima de la foto */
   .heart-badge {
     position: absolute;
     bottom: -20px;
@@ -133,12 +125,10 @@
     60%       { transform: translateX(-50%) scale(0.95); }
   }
 
-  /* Cuerpo de la carta */
   .letter-body {
     padding: 40px 36px 36px;
     position: relative;
   }
-
   .letter-body::before {
     content: '"';
     position: absolute;
@@ -188,7 +178,6 @@
     position: relative;
     z-index: 1;
   }
-
   .letter-text p + p { margin-top: 14px; }
 
   .signature {
@@ -199,7 +188,6 @@
     color: #c0406a;
   }
 
-  /* Estrellas parpadeantes */
   .sparkle {
     position: fixed;
     width: 4px;
@@ -215,7 +203,6 @@
     50%       { opacity: 1; transform: scale(1.5); }
   }
 
-  /* Borde decorativo */
   .card-border {
     height: 6px;
     background: linear-gradient(90deg, #f9a8c0, #e879a0, #f9a8c0, #e879a0);
@@ -229,6 +216,8 @@
 </style>
 </head>
 <body>
+
+<audio id="musica" src="cancion.mp3" loop></audio>
 
 <script>
   // Pétalos
@@ -266,6 +255,18 @@
     el.style.animationDelay    = (Math.random() * 4) + 's';
     document.body.appendChild(el);
   }
+
+  // Música — arranca sola al primer toque si el navegador lo bloquea
+  const audio = document.getElementById('musica');
+  audio.play().catch(() => {
+    const unlock = () => {
+      audio.play();
+      document.removeEventListener('click',      unlock);
+      document.removeEventListener('touchstart', unlock);
+    };
+    document.addEventListener('click',      unlock);
+    document.addEventListener('touchstart', unlock);
+  });
 </script>
 
 <div class="envelope-wrap">
