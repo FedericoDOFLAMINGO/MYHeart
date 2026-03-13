@@ -19,10 +19,67 @@
     font-family: 'Lora', serif;
   }
 
+  /* ── Pantalla de bienvenida ── */
+  #welcome {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: #1a0a0f;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity 0.8s ease;
+  }
+  #welcome.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #welcome .w-heart {
+    font-size: 5rem;
+    animation: wHeartbeat 1.6s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px #ff4d7d);
+    margin-bottom: 24px;
+  }
+  @keyframes wHeartbeat {
+    0%, 100% { transform: scale(1); }
+    40%       { transform: scale(1.2); }
+    70%       { transform: scale(0.92); }
+  }
+  #welcome .w-text {
+    font-family: 'Pinyon Script', cursive;
+    font-size: 2.2rem;
+    color: #f7d6e0;
+    text-shadow: 0 0 20px #ff4d7d88;
+    letter-spacing: 2px;
+  }
+  #welcome .w-sub {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: #a06070;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    animation: blink 1.4s ease-in-out infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+
+  /* ── Partículas bienvenida ── */
+  #welcome .w-petal {
+    position: absolute;
+    top: -40px;
+    animation: falling linear infinite;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  /* ── Animaciones generales ── */
   .petal {
     position: fixed;
     top: -40px;
-    font-size: 1.2rem;
     animation: falling linear infinite;
     pointer-events: none;
     z-index: 0;
@@ -48,6 +105,22 @@
     100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
   }
 
+  .sparkle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #ffcce0;
+    pointer-events: none;
+    z-index: 0;
+    animation: twinkle ease-in-out infinite;
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50%       { opacity: 1; transform: scale(1.5); }
+  }
+
+  /* ── Carta ── */
   .envelope-wrap {
     position: relative;
     z-index: 1;
@@ -188,21 +261,6 @@
     color: #c0406a;
   }
 
-  .sparkle {
-    position: fixed;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: #ffcce0;
-    pointer-events: none;
-    z-index: 0;
-    animation: twinkle ease-in-out infinite;
-  }
-  @keyframes twinkle {
-    0%, 100% { opacity: 0; transform: scale(0.5); }
-    50%       { opacity: 1; transform: scale(1.5); }
-  }
-
   .card-border {
     height: 6px;
     background: linear-gradient(90deg, #f9a8c0, #e879a0, #f9a8c0, #e879a0);
@@ -219,82 +277,99 @@
 
 <audio id="musica" src="cancion.mp3" loop></audio>
 
-<script>
-  // Pétalos
-  const petals = ['🌸','🌷','✿','❀','🌺'];
-  for (let i = 0; i < 18; i++) {
-    const el = document.createElement('div');
-    el.className = 'petal';
-    el.textContent = petals[Math.floor(Math.random() * petals.length)];
-    el.style.left = Math.random() * 100 + 'vw';
-    el.style.animationDuration = (6 + Math.random() * 8) + 's';
-    el.style.animationDelay    = (Math.random() * 10) + 's';
-    el.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
-    document.body.appendChild(el);
-  }
-
-  // Corazones fondo
-  for (let i = 0; i < 12; i++) {
-    const el = document.createElement('div');
-    el.className = 'bg-heart';
-    el.textContent = '♥';
-    el.style.left = Math.random() * 100 + 'vw';
-    el.style.animationDuration = (8 + Math.random() * 10) + 's';
-    el.style.animationDelay    = (Math.random() * 12) + 's';
-    el.style.fontSize = (0.6 + Math.random() * 1.4) + 'rem';
-    document.body.appendChild(el);
-  }
-
-  // Estrellas
-  for (let i = 0; i < 30; i++) {
-    const el = document.createElement('div');
-    el.className = 'sparkle';
-    el.style.left = Math.random() * 100 + 'vw';
-    el.style.top  = Math.random() * 100 + 'vh';
-    el.style.animationDuration = (1.5 + Math.random() * 3) + 's';
-    el.style.animationDelay    = (Math.random() * 4) + 's';
-    document.body.appendChild(el);
-  }
-
-  // Música — arranca sola al primer toque si el navegador lo bloquea
-  const audio = document.getElementById('musica');
-  audio.play().catch(() => {
-    const unlock = () => {
-      audio.play();
-      document.removeEventListener('click',      unlock);
-      document.removeEventListener('touchstart', unlock);
-    };
-    document.addEventListener('click',      unlock);
-    document.addEventListener('touchstart', unlock);
-  });
-</script>
+<!-- Pantalla de bienvenida -->
+<div id="welcome">
+  <div class="w-heart">💕</div>
+  <div class="w-text">Angela & Fer</div>
+  <div class="w-sub">toca para abrir</div>
+</div>
 
 <div class="envelope-wrap">
   <div class="ribbon"><span>para Angela, con todo mi amor</span></div>
   <div class="card">
     <div class="card-border"></div>
-
     <div class="photo-section">
       <img src="imgAF.jpg" alt="Angela y Fer">
       <div class="heart-badge">💕</div>
     </div>
-
     <div class="letter-body">
       <div class="names">Angela & Fer</div>
       <div class="divider"><span>🌸</span></div>
-
       <div class="letter-text">
         <p>Hay personas que llegan a tu vida sin avisar y de repente se convierten en tu parte favorita del día.</p>
         <p>Contigo aprendí que el amor no grita, susurra — en cada abrazo, en cada mirada, en cada momento pequeño que guardamos juntos.</p>
         <p>Gracias por ser mi calma, mi risa y mi hogar. Eres lo más bonito que tengo. 🌷</p>
       </div>
-
       <div class="signature">Con todo mi amor, Fer 💕</div>
     </div>
-
     <div class="card-border"></div>
   </div>
 </div>
+
+<script>
+  const audio   = document.getElementById('musica');
+  const welcome = document.getElementById('welcome');
+  const petals  = ['🌸','🌷','✿','❀','🌺'];
+
+  // Pétalos en la pantalla de bienvenida
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('div');
+    el.className = 'w-petal';
+    el.textContent = petals[Math.floor(Math.random() * petals.length)];
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.animationDuration = (6 + Math.random() * 8) + 's';
+    el.style.animationDelay    = (Math.random() * 8) + 's';
+    el.style.fontSize = (0.8 + Math.random() * 1) + 'rem';
+    welcome.appendChild(el);
+  }
+
+  // Al tocar la pantalla de bienvenida
+  welcome.addEventListener('click', () => {
+    audio.play();
+    welcome.classList.add('hide');
+    spawnBackground();
+  });
+  welcome.addEventListener('touchstart', () => {
+    audio.play();
+    welcome.classList.add('hide');
+    spawnBackground();
+  });
+
+  function spawnBackground() {
+    // Pétalos fondo
+    for (let i = 0; i < 18; i++) {
+      const el = document.createElement('div');
+      el.className = 'petal';
+      el.textContent = petals[Math.floor(Math.random() * petals.length)];
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (6 + Math.random() * 8) + 's';
+      el.style.animationDelay    = (Math.random() * 10) + 's';
+      el.style.fontSize = (0.8 + Math.random() * 0.8) + 'rem';
+      document.body.appendChild(el);
+    }
+    // Corazones fondo
+    for (let i = 0; i < 12; i++) {
+      const el = document.createElement('div');
+      el.className = 'bg-heart';
+      el.textContent = '♥';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (8 + Math.random() * 10) + 's';
+      el.style.animationDelay    = (Math.random() * 12) + 's';
+      el.style.fontSize = (0.6 + Math.random() * 1.4) + 'rem';
+      document.body.appendChild(el);
+    }
+    // Estrellas
+    for (let i = 0; i < 30; i++) {
+      const el = document.createElement('div');
+      el.className = 'sparkle';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.top  = Math.random() * 100 + 'vh';
+      el.style.animationDuration = (1.5 + Math.random() * 3) + 's';
+      el.style.animationDelay    = (Math.random() * 4) + 's';
+      document.body.appendChild(el);
+    }
+  }
+</script>
 
 </body>
 </html>
